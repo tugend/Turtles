@@ -1,4 +1,5 @@
 open Core.DomainTypes
+open Core.Constants
 open Variants
 
 let log message = printfn "%s" message
@@ -14,6 +15,8 @@ module Alpha =
         turtle.Turn 120.0<Degrees>
         turtle.Move 100.0
         turtle.Turn 120.0<Degrees>
+
+        turtle
 
     let drawPolygon n =
         let turtle = Alpha.Turtle(log)
@@ -31,7 +34,27 @@ module Alpha =
 
 module Beta =
 
+    // meh... same as just assigning it in the constructor
+    // and less tedius since we don't have to do it and maintain it for ALL methods
 
+    // initial state could also be moved to ctor if needed
+
+    // all methods could still be static if want them too..
+
+    let move = Beta.Turtle.move log
+    let turn = Beta.Turtle.turn log
+    let penDown = Beta.Turtle.penDown log
+    let penUp = Beta.Turtle.penUp log
+    let setColor = Beta.Turtle.setColor log
+
+    let drawTriangle() =
+        Beta.Turtle.initialTurtleState
+        |> move 100.0
+        |> turn 120.0<Degrees>
+        |> move 100.0
+        |> turn 120.0<Degrees>
+        |> move 100.0
+        |> turn 120.0<Degrees>
 
 open System
 
@@ -39,7 +62,9 @@ open System
 
 [<EntryPoint>]
 let main _ =
-    Alpha.drawPolygon(4)
+    Alpha.drawTriangle() |> ignore
+    Beta.drawTriangle() |> ignore
+
     Console.WriteLine ""
     Console.WriteLine "Done. Press any key to close."
     Console.ReadLine() |> ignore

@@ -41,6 +41,11 @@ module Turtle =
     let penUp log state =
         log "Pen up"
 
+        { state with PenState = Up }
+
+    let penDown log state =
+        log "Pen down"
+
         { state with PenState = Down }
 
     let setColor log color state =
