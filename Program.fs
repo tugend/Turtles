@@ -16,8 +16,6 @@ module Alpha =
         turtle.Move 100.0
         turtle.Turn 120.0<Degrees>
 
-        turtle
-
     let drawPolygon n =
         let turtle = Alpha.Turtle(log)
 
@@ -34,13 +32,14 @@ module Alpha =
 
 module Beta =
 
-    // meh... same as just assigning it in the constructor
-    // and less tedius since we don't have to do it and maintain it for ALL methods
-
-    // initial state could also be moved to ctor if needed
-
-    // all methods could still be static if want them too..
-
+    ///
+    /// Comments
+    /// Assigning the values in the constructor(s) seems clearly preferable here
+    /// since callers have less work to do, and in this case you'd prefer to keep
+    /// methods in sync and intended use is less work and easier...
+    ///
+    /// Immutable state is nice though...
+    ///
     let move = Beta.Turtle.move log
     let turn = Beta.Turtle.turn log
     let penDown = Beta.Turtle.penDown log
@@ -56,14 +55,30 @@ module Beta =
         |> move 100.0
         |> turn 120.0<Degrees>
 
+    let drawPolygon n =
+        let angle = (180.0 - (360.0/float n)) * 1.0<Degrees>
+
+        let drawSide state _ =
+            state
+            |> move 100.0
+            |> turn angle
+
+        [1..n]
+        |> drawSide Beta.Turtle.initialTurtleState
+        |> ignore
+
 open System
 
 // TODO: write some tests of the turtle...
 
 [<EntryPoint>]
 let main _ =
-    Alpha.drawTriangle() |> ignore
-    Beta.drawTriangle() |> ignore
+    // Alpha.drawTriangle()
+    // Beta.drawTriangle()
+
+    Alpha.drawPolygon(5)
+    Console.WriteLine ""
+    Beta.drawPolygon(5)
 
     Console.WriteLine ""
     Console.WriteLine "Done. Press any key to close."
