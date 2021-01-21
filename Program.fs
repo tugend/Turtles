@@ -1,11 +1,10 @@
 open Core.DomainTypes
-open Core.Constants
 open Variants
+open System
 
 let log message = printfn "%s" message
 
 module Alpha =
-
     let drawTriangle() =
         let turtle = Alpha.Turtle(log)
 
@@ -31,7 +30,6 @@ module Alpha =
             drawOneSide()
 
 module Beta =
-
     ///
     /// Comments
     /// Assigning the values in the constructor(s) seems clearly preferable here
@@ -66,19 +64,34 @@ module Beta =
         [1..n]
         |> drawSide Beta.Turtle.initialTurtleState
         |> ignore
-
-open System
-
-// TODO: write some tests of the turtle...
+        
+module Gamma =
+    
+    /// I don't buy into the whole 'system is very stateful' as a critique
+    /// To me this looks like a fine implementation and if I'd want to 'decoupl' the
+    /// coupling between the api and the turtle implementation, I'd use a turtle interface
+    /// and assign it via the ctor, easy!
+    /// 
+    let drawPolygon n =
+        let angle = 180.0 - (360.0/float n)
+        let api = Api.Gamma.Api()
+        
+        let drawSide() =
+            api.Exec "Move 100.0"
+            api.Exec (sprintf "Turn %f" angle)
+        
+        for _ in [1..n] do
+            drawSide()
 
 [<EntryPoint>]
 let main _ =
+    // TODO: write some comparison tests
     // Alpha.drawTriangle()
     // Beta.drawTriangle()
-
-    Alpha.drawPolygon(5)
+    // Alpha.drawPolygon(5)
+    Gamma.drawPolygon 5
     Console.WriteLine ""
-    Beta.drawPolygon(5)
+    Beta.drawPolygon 5
 
     Console.WriteLine ""
     Console.WriteLine "Done. Press any key to close."
