@@ -1,4 +1,4 @@
-module Api.Gamma
+module Apis.Gamma
 
 open Core.DomainTypes
 
@@ -26,20 +26,20 @@ let private parseColor value =
     | _ ->
         let msg = sprintf "Color '%s' is not recognized" value
         raise (ParseException msg)
-            
+
 type Api() =
-    let log message = printfn "%s" message 
+    let log message = printfn "%s" message
     let turtle = Variants.Alpha.Turtle(log)
-    
+
     member this.Exec (command:string) =
-        let tokens = 
+        let tokens =
             command.Split(' ')
             |> List.ofArray
             |> List.map (fun x -> x.Trim())
-            
+
         match tokens with
             | ["Move"; value] ->
-                let distance = parseDistance value  
+                let distance = parseDistance value
                 turtle.Move distance
             | ["Turn"; value] ->
                 let angle = parseAngle value

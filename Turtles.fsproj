@@ -12,7 +12,8 @@
     <Compile Include="Ui/MoveLogger.fs" />
     <Compile Include="Variants/AlphaTurtle.fs" />
     <Compile Include="Variants/BetaTurtle.fs" />
-    <Compile Include="Apis\CetaApi.fs" />
+    <Compile Include="Apis/GammaApi.fs" />
+    <Compile Include="Apis/DeltaApi.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 
