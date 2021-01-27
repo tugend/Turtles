@@ -102,8 +102,6 @@ module Delta =
         api.Exec "Movex 100" |> throwOnError
         api.Exec "Turn 120" |> throwOnError
         api.Exec "Move 100" |> throwOnError
-        api.Exec "Turn 120" |> throwOnError
-        api.Exec "Move 100" |> throwOnError
 
 [<EntryPoint>]
 let main _ =
@@ -114,7 +112,11 @@ let main _ =
     // Gamma.drawPolygon 5
     // Beta.drawPolygon 5
 
-    Delta.drawTriangle()
+    // Delta.drawTriangle()
+
+    let turtle = Apis.Epislon.TurtleApi()
+    let result = turtle.Exec "Move 1x00"
+
     Console.WriteLine ""
 
     Console.WriteLine ""

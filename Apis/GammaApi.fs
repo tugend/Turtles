@@ -31,7 +31,7 @@ type Api() =
     let log message = printfn "%s" message
     let turtle = Variants.Alpha.Turtle(log)
 
-    member this.Exec (command:string) =
+    member _.Exec (command:string) =
         let tokens =
             command.Split(' ')
             |> List.ofArray

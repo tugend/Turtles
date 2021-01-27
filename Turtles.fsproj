@@ -12,8 +12,10 @@
     <Compile Include="Ui/MoveLogger.fs" />
     <Compile Include="Variants/AlphaTurtle.fs" />
     <Compile Include="Variants/BetaTurtle.fs" />
+    <Compile Include="Agents/EpsilonAgent.fs" />
     <Compile Include="Apis/GammaApi.fs" />
     <Compile Include="Apis/DeltaApi.fs" />
+    <Compile Include="Apis/EpsilonApi.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 
