@@ -6,36 +6,10 @@ open Agents.Epsilon
 open Result
 
 type ResultBuilder() =
-    member this.Bind(m:Result<'a,'error>,f:'a -> Result<'b,'error>) =
-        Result.bind f m
-    member this.Return(x) :Result<'a,'error> =
-        Ok x
-    member this.ReturnFrom(m) :Result<'a,'error> =
-        m
-    member this.Zero() :Result<unit,'error> =
-        this.Return ()
-    member this.Combine(m1, f) =
-        this.Bind(m1, f)
-    member this.Delay(f) =
-        f
-    member this.Run(m) =
-        m()
-    member this.TryWith(m:Result<'a,'error>, h: exn -> Result<'a,'error>) =
-        try this.ReturnFrom(m)
-        with e -> h e
-    member this.TryFinally(m:Result<'a,'error>, compensation) =
-        try this.ReturnFrom(m)
-        finally compensation()
-    // member this.Using(res:#IDisposable, body) : Result<'b,'error> =
-    //     this.TryFinally(body res, (fun () -> match res with null -> () | disp -> disp.Dispose()))
-    member this.While(cond, m) =
-        if not (cond()) then
-            this.Zero()
-        else
-            this.Bind(m(), fun _ -> this.While(cond, m))
-    // member this.For(sequence:seq<_>, body) =
-    //     this.Using(sequence.GetEnumerator(),
-    //         (fun enum -> this.While(enum.MoveNext, fun _ -> body enum.Current)))
+    member _.Bind(m:Result<'a,'error>, f:'a -> Result<'b,'error>) =
+        bind f m
+    member _.Zero() :Result<unit,'error> =
+        Ok ()
 
 let result = ResultBuilder()
 
@@ -63,13 +37,6 @@ let private parseColor value =
     | "Red" -> Ok Red
     | _ -> Error (InvalidColor value)
 
-// JESUS FUCKING CHRIST, THIS LOOKS SOOOO MUCH EASIER TO READ THAT THAN SILLY FUNCTIONAL COMPOSITION CRAP
-let lift2R f xR yR =
-    match xR, yR with
-    | Error e, _ -> Error e
-    | _, Error e -> Error e
-    | Ok x, Ok y -> Ok(f x y)
-
 let log message = printfn "%s" message
 let move = Beta.Turtle.move log
 let turn = Beta.Turtle.turn log
@@ -93,8 +60,25 @@ type TurtleApi() =
                     let command = Move distance
                     turtleAgent.Post command
                 }
+            | [ "Turn"; value ] -> result {
+                    let! angle = parseAngle value
+                    let command = Turn angle
+                    turtleAgent.Post command
+                }
+            | [ "Pen"; "Up" ] -> result {
+                    let command = PenUp
+                    turtleAgent.Post command
+                }
+            | [ "Pen"; "Down" ] -> result {
+                    let command = PenDown
+                    turtleAgent.Post command
+                }
+            | [ "SetColor"; value ] -> result {
+                    let! color = parseColor value
+                    let command = SetColor color
+                    turtleAgent.Post command
+                }
             | _ -> Error(InvalidCommand command)
-
 
         result
 

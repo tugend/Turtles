@@ -1,121 +1,52 @@
-open Core.DomainTypes
-open Variants
 open System
+open Programs
 
-let log message = printfn "%s" message
+// expected drawTriangle output
 
-module Alpha =
-    let drawTriangle() =
-        let turtle = Alpha.Turtle(log)
-
-        turtle.Move 100.0
-        turtle.Turn 120.0<Degrees>
-        turtle.Move 100.0
-        turtle.Turn 120.0<Degrees>
-        turtle.Move 100.0
-        turtle.Turn 120.0<Degrees>
-
-    let drawPolygon n =
-        let turtle = Alpha.Turtle(log)
-
-        // why the 180 degree offset?
-        // let angle = (360.0/float n) * 1.0<Degrees>
-        let angle = (180.0 - (360.0/float n)) * 1.0<Degrees>
-
-        let drawOneSide() =
-            turtle.Move 100.0
-            turtle.Turn angle
-
-        for _ in [1..n] do
-            drawOneSide()
-
-module Beta =
-    ///
-    /// Comments
-    /// Assigning the values in the constructor(s) seems clearly preferable here
-    /// since callers have less work to do, and in this case you'd prefer to keep
-    /// methods in sync and intended use is less work and easier...
-    ///
-    /// Immutable state is nice though...
-    ///
-    let move = Beta.Turtle.move log
-    let turn = Beta.Turtle.turn log
-    let penDown = Beta.Turtle.penDown log
-    let penUp = Beta.Turtle.penUp log
-    let setColor = Beta.Turtle.setColor log
-
-    let drawTriangle() =
-        Beta.Turtle.initialTurtleState
-        |> move 100.0
-        |> turn 120.0<Degrees>
-        |> move 100.0
-        |> turn 120.0<Degrees>
-        |> move 100.0
-        |> turn 120.0<Degrees>
-
-    let drawPolygon n =
-        let angle = (180.0 - (360.0/float n)) * 1.0<Degrees>
-
-        let drawSide state _ =
-            state
-            |> move 100.0
-            |> turn angle
-
-        [1..n]
-        |> drawSide Beta.Turtle.initialTurtleState
-        |> ignore
-
-module Gamma =
-
-    /// I don't buy into the whole 'system is very stateful' as a critique
-    /// To me this looks like a fine implementation and if I'd want to 'decoupl' the
-    /// coupling between the api and the turtle implementation, I'd use a turtle interface
-    /// and assign it via the ctor, easy!
-    ///
-    let drawPolygon n =
-        let angle = 180.0 - (360.0/float n)
-        let api = Apis.Gamma.Api()
-
-        let drawSide() =
-            api.Exec "Move 100.0"
-            api.Exec (sprintf "Turn %f" angle)
-
-        for _ in [1..n] do
-            drawSide()
+// Move 100.0 distance
+// Draw line from (0.0, 0.0) to (100.0, 0.0) using Black
+// Turn 120.0
+// Move 100.0 distance
+// Draw line from (100.0, 0.0) to (50.0, 86.6) using Black
+// Turn 120.0
+// Move 100.0 distance
+// Draw line from (50.0, 86.6) to (-0.0, -0.0) using Black
 
 
-module Delta =
+// expected drawPolygon 5 output
 
-    let drawTriangle() =
-        let api = Apis.Delta.TurtleApi()
+// Move 100.0 distance
+// Draw line from (0.0, 0.0) to (100.0, 0.0) using Black
+// Turn 108.0
+// Move 100.0 distance
+// Draw line from (100.0, 0.0) to (69.1, 95.1) using Black
+// Turn 108.0
+// Move 100.0 distance
+// Draw line from (69.1, 95.1) to (-11.8, 36.3) using Black
+// Turn 108.0
+// Move 100.0 distance
+// Draw line from (-11.8, 36.3) to (69.1, -22.4) using Black
+// Turn 108.0
+// Move 100.0 distance
+// Draw line from (69.1, -22.4) to (100.0, 72.7) using Black
+// Turn 108.0
 
-        let throwOnError result =
-            match result with
-                | Error (Apis.Delta.InvalidDistance x) -> raise (InvalidOperationException "Invalid distance") |> ignore
-                | Error (Apis.Delta.InvalidColor x) -> raise (InvalidOperationException "Invalid color")  |> ignore
-                | Error (Apis.Delta.InvalidCommand x) -> raise (InvalidOperationException "Invalid command") |> ignore
-                | Error (Apis.Delta.InvalidAngle x) -> raise (InvalidOperationException "Invalid angle") |> ignore
-                | Ok _ -> ()
-
-        api.Exec "Move 100" |> throwOnError
-        api.Exec "Turn 120" |> throwOnError
-        api.Exec "Movex 100" |> throwOnError
-        api.Exec "Turn 120" |> throwOnError
-        api.Exec "Move 100" |> throwOnError
 
 [<EntryPoint>]
 let main _ =
     // TODO: write some comparison tests
-    // Alpha.drawTriangle()
-    // Beta.drawTriangle()
-    // Alpha.drawPolygon(5)
-    // Gamma.drawPolygon 5
-    // Beta.drawPolygon 5
 
-    // Delta.drawTriangle()
+    let alpha3State = Alpha.drawTriangle()
+    let beta3State = Beta.drawTriangle()
+    let gamma3State = Gamma.drawTriangle()
+    let delta3State = Delta.drawTriangle()
+    let epislon3State = Epislon.drawTriangle()
 
-    let turtle = Apis.Epislon.TurtleApi()
-    let result = turtle.Exec "Move 1x00"
+    let alpha5State =  Alpha.drawPolygon 5
+    let beta5State =  Beta.drawPolygon 5
+    let gamma5State = Gamma.drawPolygon 5
+    let delta5State = Delta.drawPolygon 5
+    let epislon5State = Epislon.drawPolygon 5
 
     Console.WriteLine ""
 

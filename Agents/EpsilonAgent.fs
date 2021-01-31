@@ -43,4 +43,4 @@ type TurtleAgent() =
     )
 
     member _.Post(command) =
-        mailboxProc.Post command
+        do mailboxProc.Post command

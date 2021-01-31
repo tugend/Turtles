@@ -16,6 +16,11 @@
     <Compile Include="Apis/GammaApi.fs" />
     <Compile Include="Apis/DeltaApi.fs" />
     <Compile Include="Apis/EpsilonApi.fs" />
+    <Compile Include="Programs/AlphaProgram.fs" />
+    <Compile Include="Programs/BetaProgram.fs" />
+    <Compile Include="Programs/GammaProgram.fs" />
+    <Compile Include="Programs/DeltaProgram.fs" />
+    <Compile Include="Programs/EpislonProgram.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 
