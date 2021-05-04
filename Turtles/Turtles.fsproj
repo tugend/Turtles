@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Core/DomainTypes.fs" />
+    <Compile Include="Core/Constants.fs" />
+    <Compile Include="Core/Movement.fs" />
+    <Compile Include="Ui/MoveLogger.fs" />
+    <Compile Include="Ui/MoveRecorder.fs" />
+    <Compile Include="Variants/AlphaTurtle.fs" />
+    <Compile Include="Variants/BetaTurtle.fs" />
+    <Compile Include="Agents/EpsilonAgent.fs" />
+    <Compile Include="Apis/GammaApi.fs" />
+    <Compile Include="Apis/DeltaApi.fs" />
+    <Compile Include="Apis/EpsilonApi.fs" />
+    <Compile Include="Apis/ZetaObjectOrientedApi.fs" />
+    <Compile Include="Apis/ZetaFunctionalApi.fs" />
+    <Compile Include="Programs/AlphaProgram.fs" />
+    <Compile Include="Programs/BetaProgram.fs" />
+    <Compile Include="Programs/GammaProgram.fs" />
+    <Compile Include="Programs/DeltaProgram.fs" />
+    <Compile Include="Programs/EpsilonProgram.fs" />
+    <Compile Include="Programs/ZetaObjectOrientedProgram.fs" />
+    <Compile Include="Programs/ZetaFunctionalProgram.fs" />
+    <Compile Include="Program.fs" />
+  </ItemGroup>
+</Project>
